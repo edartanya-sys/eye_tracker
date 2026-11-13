@@ -1,5 +1,4 @@
 import mediapipe as mp
-from mediapipe.tasks.python import vision
 from threading import Lock
 
 model_path = "face_landmarker.task"
@@ -33,6 +32,51 @@ def get_landmarks():
             return None
 
         return latest_landmarks.copy()
+
+
+def get_eye_features(landmarks):
+
+    eyes = [
+        {
+            "corners": (33, 133),
+            "top": (159, 160),
+            "bottom": (145, 144),
+            "iris": range(468, 473)
+        },
+        {
+            "corners": (362, 263),
+            "top": (386, 385),
+            "bottom": (374, 380),
+            "iris": range(473, 478)
+        }
+    ]
+
+    features = []
+
+    for eye in eyes:
+
+        iris_x = sum(landmarks[i][0] for i in eye["iris"]) / 5
+        iris_y = sum(landmarks[i][1] for i in eye["iris"]) / 5
+
+
+        x1 = landmarks[eye["corners"][0]][0]
+        x2 = landmarks[eye["corners"][1]][0]
+
+        left_x = min(x1, x2)
+        right_x = max(x1, x2)
+
+
+        top_y = sum(landmarks[i][1] for i in eye["top"]) / 2
+        bottom_y = sum(landmarks[i][1] for i in eye["bottom"]) / 2
+
+
+        u = (iris_x - left_x) / (right_x - left_x)
+        v = (iris_y - top_y) / (bottom_y - top_y)
+
+        features.append((u, v))
+
+    return features
+
 
 
 options = FaceLandmarkerOptions(

@@ -1,7 +1,8 @@
 import cv2 as cv
-from face_detector import face, get_landmarks
+from face_detector import face, get_landmarks, get_eye_features
 import mediapipe as mp
 import time
+
 
 cap = cv.VideoCapture(0)
 
@@ -37,6 +38,17 @@ while cap.isOpened():
     landmarks = get_landmarks()
 
     if landmarks is not None:
+        eye_features = get_eye_features(landmarks)
+
+        right_eye_features = eye_features[0]
+        left_eye_features = eye_features[1]
+
+        print(
+            f"Right eye: u={left_eye_features[0]:.3f}, v={left_eye_features[1]:.3f} | "
+            f"Left eye: u={right_eye_features[0]:.3f}, v={right_eye_features[1]:.3f}"
+        )
+
+    if landmarks is not None:
         height, width, _ = frame.shape
 
 
@@ -52,7 +64,6 @@ while cap.isOpened():
                 px = int(x * width)
                 py = int(y * height)
                 cv.circle(frame, (px, py), 2, (0, 255, 0), -1)
-
 
         for index in range(468, 478):
             x, y = landmarks[index]
