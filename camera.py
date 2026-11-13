@@ -9,7 +9,7 @@ if not cap.isOpened():
     print("Can't open camera")
     exit()
 
-# Eye contour landmark indices
+
 right_eye = [33, 7, 163, 144, 145, 153, 154, 155, 133,
              173, 157, 158, 159, 160, 161, 246]
 
@@ -39,13 +39,13 @@ while cap.isOpened():
     if landmarks is not None:
         height, width, _ = frame.shape
 
-        # Draw all face landmarks
+
         for x, y in landmarks:
             px = int(x * width)
             py = int(y * height)
             cv.circle(frame, (px, py), 1, (180, 180, 180), -1)
 
-        # Draw eye contours
+
         for eye in [right_eye, left_eye]:
             for index in eye:
                 x, y = landmarks[index]
@@ -53,7 +53,7 @@ while cap.isOpened():
                 py = int(y * height)
                 cv.circle(frame, (px, py), 2, (0, 255, 0), -1)
 
-        # Draw iris landmarks
+
         for index in range(468, 478):
             x, y = landmarks[index]
             px = int(x * width)
