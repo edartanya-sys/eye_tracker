@@ -1,33 +1,72 @@
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
+# Virtual environments
 .venv/
 venv/
 env/
 ENV/
 
+# IDE
 .idea/
 *.iml
 .vscode/
 
+# OS
 Thumbs.db
 desktop.ini
 .DS_Store
 
+# Build files
+build/
+dist/
+*.spec
+
+# Project data
 data/
 datasets/
 calibration/
 test_images/
 output/
-
 logs/
+
+# Video and temporary files
 *.log
 *.avi
 *.mp4
+*.tmp
 
+# ML models and weights
 *.tflite
 *.onnx
 *.h5
 *.pth
+*.pt
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Jupyter
+.ipynb_checkpoints/
+
+# C++ build files
+*.o
+*.obj
+*.exe
+*.dll
+*.lib
+*.pdb
+cmake-build-*/
+
+# Temporary files
+*.bak
+*.swp
