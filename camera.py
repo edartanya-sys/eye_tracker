@@ -2,7 +2,7 @@ import cv2 as cv
 from face_detector import face, get_landmarks, get_eye_features
 import mediapipe as mp
 import time
-
+from head_pose import get_head_pose
 
 cap = cv.VideoCapture(0)
 
@@ -37,21 +37,26 @@ while cap.isOpened():
 
     landmarks = get_landmarks()
 
+
+
+
+
+
     if landmarks is not None:
-        eye_features = get_eye_features(landmarks)
+        eye_features = get_eye_features(landmarks) #получение метрик зрачков
 
         right_eye_features = eye_features[0]
         left_eye_features = eye_features[1]
 
         print(
-            f"Right eye: u={left_eye_features[0]:.3f}, v={left_eye_features[1]:.3f} | "
-            f"Left eye: u={right_eye_features[0]:.3f}, v={right_eye_features[1]:.3f}"
+            f"Right eye: u={right_eye_features[0]:.3f}, v={right_eye_features[1]:.3f} | "
+            f"Left eye: u={left_eye_features[0]:.3f}, v={left_eye_features[1]:.3f}"
         )
 
     if landmarks is not None:
         height, width, _ = frame.shape
 
-
+    # отрисовка лица
         for x, y in landmarks:
             px = int(x * width)
             py = int(y * height)
@@ -72,6 +77,21 @@ while cap.isOpened():
             cv.circle(frame, (px, py), 3, (0, 0, 255), -1)
 
     cv.imshow('Face Tracker', frame)
+
+
+
+    #пределение поворота головы
+    if landmarks is not None:
+        head_pose = get_head_pose(landmarks, frame.shape)
+
+        if head_pose is not None:
+            pitch, yaw, roll = head_pose
+
+            print(
+                f"Pitch: {pitch:.2f} | "
+                f"Yaw: {yaw:.2f} | "
+                f"Roll: {roll:.2f}"
+            )
 
     if cv.waitKey(1) & 0xFF == ord('q'):
         break
